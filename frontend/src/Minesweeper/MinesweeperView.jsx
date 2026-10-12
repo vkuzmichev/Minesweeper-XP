@@ -145,7 +145,11 @@ function MineSweeperView({
     }
   }, [openBehavior.index, openBehavior.behavior]);
   function onMouseDownCeils(e, index) {
-    if (e.button === 4 || e.buttons === 3 || e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+    const isCapsOn = e.getModifierState('CapsLock');
+    if (e.button === 2) {
+      // Right click.
+      changeCeilState(index);
+    } else if (e.button === 4 || e.buttons === 3 || e.ctrlKey || e.altKey || e.shiftKey || e.metaKey || isCapsOn) {
       // e.button === 4 -> Middle click (scroll wheel).
       // e.buttons === 3 -> Primary + secondary button pressed simultaneously.
       // Or, any button click while holding down any key in (Ctrl, Alt, Shift, Meta).
@@ -153,9 +157,6 @@ function MineSweeperView({
         index,
         behavior: 'multi', // Chording.
       });
-    } else if (e.button === 2) {
-      // Right click.
-      changeCeilState(index);
     } else if (e.button === 0) {
       // Left click.
       setOpenBehavior({
